@@ -17,8 +17,9 @@
 Este proyecto investiga la relación causal y predictiva entre los **patrones biométricos objetivos de sueño** (registrados longitudinalmente mediante wearables Fitbit) y el **rendimiento académico universitario** medido a través del promedio acumulado del semestre (`term_gpa`).
 
 El problema se formula como una **clasificación binaria supervisada**:
-$$\text{Clase 1: Alto Rendimiento} \quad (\text{term\_gpa} \ge 3.5)$$
-$$\text{Clase 0: Rendimiento Estándar/Bajo} \quad (\text{term\_gpa} < 3.5)$$
+
+* **Clase 1 — Alto Rendimiento:** `term_gpa >= 3.5`
+* **Clase 0 — Rendimiento Estándar/Bajo:** `term_gpa < 3.5`
 
 ### Contexto Científico y Benchmark
 El trabajo se fundamenta en el dataset abierto de la Universidad Carnegie Mellon (CMU) publicado en:
@@ -62,12 +63,15 @@ A diferencia del estudio original (que utilizó modelos econométricos y lineale
 
 * **Muestra:** $N = 634$ estudiantes de primer año universitario distribuidos en 5 cohortes académicas.
 * **Instrumentación:** Relojes biométricos Fitbit Flex y Fitbit Charge HR utilizados durante todo el semestre académico.
-* **Balance de Clases:** Moderado y sano: Clase 1 ($57.89\%$, 367 estudiantes) y Clase 0 ($42.11\%$, 267 estudiantes).
+* **Balance de Clases:** Moderado y sano: Clase 1 (**57.89%**, 367 estudiantes) y Clase 0 (**42.11%**, 267 estudiantes).
 
 ### Reglas de Limpieza y Transformación
 1. **Espacios en blanco:** Reemplazo de espacios vacíos camuflados (`' '`) por `np.nan`.
-2. **Corrección de dominio:** Depuración de la variable `demo_firstgen` restringiéndola estrictamente al dominio binario $\{0, 1\}$.
-3. **Corrección de asimetría (*skewness*):** Transformación $\text{log\_bedtime\_mssd} = \ln(1 + \text{bedtime\_mssd})$, reduciendo el *skewness* de **8.24** a **1.15**, estabilizando la varianza.
+2. **Corrección de dominio:** Depuración de la variable `demo_firstgen` restringiéndola estrictamente al dominio binario `{0, 1}`.
+3. **Corrección de asimetría (*skewness*):** Transformación `log_bedtime_mssd = ln(1 + bedtime_mssd)`, reduciendo el *skewness* de **8.24** a **1.15**, estabilizando la varianza.
+
+### Análisis Exploratorio y Correlaciones
+![Análisis Exploratorio de Datos y Correlaciones](resultados/figuras/fig1_eda_distribuciones_y_correlacion.png)
 
 ---
 
@@ -90,6 +94,8 @@ Se variaron 3 hiperparámetros clave por modelo en 3 niveles (Bajo, Defecto, Alt
 * **SVM:** $C$ (0.01, 1.0, 100.0), $\gamma$ (0.001, `'scale'`, 2.0), $\text{Kernel}$ (`'linear'`, `'rbf'`, `'poly'` $d=3$).
 * **MLP:** `hidden_layer_sizes` ((3,), (100,), (300, 150)), `learning_rate_init` (0.0001, 0.001, 0.5), `max_iter` (20, 200, 1000).
 
+![Diseño Experimental 3x3](resultados/figuras/fig2_diseno_experimental_esquema.png)
+
 ---
 
 ## 5. Resultados Principales
@@ -101,6 +107,20 @@ Se variaron 3 hiperparámetros clave por modelo en 3 niveles (Bajo, Defecto, Alt
 | **Random Forest** | **C3** | **`n_estimators=500`** | **0.7446** | **0.0371** | **75.24%** | **0.7462** | **0.7438** | **0.8174** | **TN=184, FP=83, FN=74, TP=293** |
 | **MLP** | C2 | `hidden_layer_sizes=(100,)` | 0.7151 | 0.0373 | 72.40% | 0.7168 | 0.7146 | 0.8007 | TN=175, FP=92, FN=83, TP=284 |
 | **SVM** | C2 | $C=1.0$ (Kernel RBF) | 0.7127 | 0.0451 | 72.56% | 0.7199 | 0.7104 | 0.7946 | TN=164, FP=103, FN=71, TP=296 |
+
+### Comparativa Final y Matrices de Confusión
+![Comparativa de Modelos y Matrices de Confusión](resultados/figuras/fig6_comparacion_y_matrices_confusion.png)
+
+### Curvas de Sensibilidad de Hiperparámetros por Modelo
+
+**Random Forest (RF)**
+![Resultados Experimentales Random Forest](resultados/figuras/fig_resultados_Random_Forest.png)
+
+**Support Vector Machines (SVM)**
+![Resultados Experimentales SVM](resultados/figuras/fig_resultados_SVM.png)
+
+**Perceptrón Multicapa (MLP)**
+![Resultados Experimentales MLP](resultados/figuras/fig_resultados_MLP.png)
 
 ### Conclusiones Técnicas
 1. **Modelo Ganador:** **Random Forest (C3: 500 estimadores)** demostró el mejor desempeño general, con un **Recall de 79.84%** en la detección de estudiantes de alto GPA y la menor desviación estándar ($\sigma = 0.0371$).

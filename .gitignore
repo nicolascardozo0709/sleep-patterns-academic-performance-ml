@@ -48,5 +48,6 @@ desktop.ini
 *.zip
 *.tar.gz
 
-# Internal deployment guides
+# Internal deployment and master guides
 GUIA_SUBIDA_GITHUB_AGENTE.*
+GUIA_MAESTRA_*
