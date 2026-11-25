@@ -1,0 +1,10 @@
+Caso,Hiperparametro,Nivel,Valor,F1_Macro,F1_Std,Accuracy,Precision_Macro,Recall_Macro,ROC_AUC
+C1,n_estimators,Bajo,5,0.7078,0.0422,0.7161,0.7086,0.7074,0.7859
+C2,n_estimators,Defecto,100,0.7414,0.0417,0.7492,0.7431,0.7404,0.8184
+C3,n_estimators,Alto,500,0.7446,0.0371,0.7523,0.7462,0.7436,0.8174
+C4,max_depth,Bajo,1,0.6109,0.0244,0.6672,0.6887,0.6228,0.7997
+C5,max_depth,Defecto,10,0.7414,0.0417,0.7492,0.7431,0.7404,0.8184
+C6,max_depth,Alto,30,0.7429,0.0386,0.7508,0.7446,0.7418,0.8169
+C7,min_samples_leaf,Bajo,1,0.7262,0.0374,0.735,0.7282,0.7251,0.8019
+C8,min_samples_leaf,Defecto,5,0.7414,0.0417,0.7492,0.7431,0.7404,0.8184
+C9,min_samples_leaf,Alto,80,0.6939,0.0311,0.7161,0.7177,0.6918,0.7903
